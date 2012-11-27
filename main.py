@@ -47,7 +47,7 @@ def setText(t):
 	ht = 15
 	for text in t:
 		#text
-		s = "%s" % [text[0], text[1]]
+		s = "%s" % text
 		data = get_text(s, (255,0,0), (255,255,255), 50, ht, 20)
 		screen.blit(data[0], data[1])
 		ht += 25
