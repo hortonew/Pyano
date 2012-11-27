@@ -11,7 +11,7 @@ event_get = pygame.fastevent.get
 event_post = pygame.fastevent.post
 
 #current notes being played
-playing = []
+playing = dict()
 
 pygame.midi.init()
 
@@ -65,7 +65,8 @@ def getNote(i):
 		note -= 12
 		count += 1
 	
-	return [notes[note-1], count]
+	output = "%s%s" % (notes[note-1], count)
+	return output
 
 #loop
 while going:
@@ -89,20 +90,20 @@ while going:
 		v = midi_events[0][0][2]
 		
 		if v != 0:
-			playing.append(n)
+			playing[n] = [v, mt]
 		else:
 			#caused errors without catch (because of playing too fast)
 			try:
 				#allows for hitting a stuck note to remove all instance out of playing list
 				while n in playing:
-					playing.remove(n)
+					del playing[n]
 			except:
 				pass
 				
 		#print data
 		print "Note: %s, Volume: %s, Time: %s" % (n, v, mt)
 		print "Playing: %s" % playing
-		
+
 	setText(playing)
 	pygame.display.flip()
 	
