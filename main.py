@@ -15,15 +15,43 @@ playing = []
 
 pygame.midi.init()
 
+#size of pyano window
+WINDOW_SIZE = (800, 600)
+
 #piano input device
 i = pygame.midi.Input(yamaha)
-#window = pygame.display.set_mode((468,60))
+
+screen = pygame.display.set_mode((WINDOW_SIZE))
+screen.fill((255,255,255))
+pygame.display.flip()
 
 #time
 mt = None
 #piano loop
 going = True
+		
+#get text pair for drawing
+def get_text(text, color, bgcolor, cx, cy, size):
+		font = pygame.font.Font(None, size)
+		t = font.render(text, True, color, bgcolor)
+		t_rect = t.get_rect()
+		t_rect.centerx = cx
+		t_rect.centery = cy
 
+		return t, t_rect
+
+#draw all the text to the screen
+def setText(t):
+	screen.fill((255,255,255))
+	#text y location
+	ht = 15
+	for text in t:
+		#text
+		s = "%s" % [text[0], text[1]]
+		data = get_text(s, (255,0,0), (255,255,255), 15, ht, 20)
+		screen.blit(data[0], data[1])
+		ht += 25
+		
 # convert integer into note/octave
 def getNote(i):
 	notes = ['A', 'A#/Bb', 'B', 'C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab']
@@ -65,18 +93,20 @@ while going:
 		else:
 			#caused errors without catch (because of playing too fast)
 			try:
-				playing.remove(n)
+				#allows for hitting a stuck note to remove all instance out of playing list
+				#still need to figure out how to make sure 
+				while n in playing:
+					playing.remove(n)
 			except:
 				pass
 				
 		#print data
 		print "Note: %s, Volume: %s, Time: %s" % (n, v, mt)
 		print "Playing: %s" % playing
-		#midi_evs = pygame.midi.midis2events(midi_events, i.device_id)
 		
-		#for m_e in midi_evs:
-			#event_post( m_e )
-
+	setText(playing)
+	pygame.display.flip()
+	
 #remove midi object			
 del i
 pygame.midi.quit()
