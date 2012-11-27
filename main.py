@@ -48,7 +48,7 @@ def setText(t):
 	for text in t:
 		#text
 		s = "%s" % [text[0], text[1]]
-		data = get_text(s, (255,0,0), (255,255,255), 15, ht, 20)
+		data = get_text(s, (255,0,0), (255,255,255), 50, ht, 20)
 		screen.blit(data[0], data[1])
 		ht += 25
 		
@@ -94,7 +94,6 @@ while going:
 			#caused errors without catch (because of playing too fast)
 			try:
 				#allows for hitting a stuck note to remove all instance out of playing list
-				#still need to figure out how to make sure 
 				while n in playing:
 					playing.remove(n)
 			except:
