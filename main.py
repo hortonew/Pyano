@@ -65,8 +65,8 @@ def getNote(i):
 		note -= 12
 		count += 1
 	
-	output = "%s%s" % (notes[note-1], count)
-	return output
+	name = "%s%s" % (notes[note-1], count)
+	return [name, notes[note-1], count]
 
 #loop
 while going:
@@ -90,13 +90,11 @@ while going:
 		v = midi_events[0][0][2]
 		
 		if v != 0:
-			playing[n] = [v, mt]
+			playing[n[0]] = [n[1],n[2],v, mt]
 		else:
 			#caused errors without catch (because of playing too fast)
 			try:
-				#allows for hitting a stuck note to remove all instance out of playing list
-				while n in playing:
-					del playing[n]
+				del playing[n[0]]
 			except:
 				pass
 				
