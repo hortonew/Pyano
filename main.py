@@ -44,13 +44,13 @@ def get_text(text, color, bgcolor, cx, cy, size):
 def setText(t):
 	screen.fill((255,255,255))
 	#text y location
-	ht = 15
 	for text in t:
 		#text
 		s = "%s" % text
-		data = get_text(s, (255,0,0), (255,255,255), 50, ht, 20)
+		modifier = t[text][2]
+		ht = t[text][1] * 25
+		data = get_text(s, (255,0,0), (255,255,255), 50*modifier, ht, 20+modifier)
 		screen.blit(data[0], data[1])
-		ht += 25
 		
 # convert integer into note/octave
 def getNote(i):
@@ -66,7 +66,7 @@ def getNote(i):
 		count += 1
 	
 	name = "%s%s" % (notes[note-1], count)
-	return [name, notes[note-1], count]
+	return [name, notes[note-1], note, count]
 
 #loop
 while going:
@@ -90,7 +90,7 @@ while going:
 		v = midi_events[0][0][2]
 		
 		if v != 0:
-			playing[n[0]] = [n[1],n[2],v, mt]
+			playing[n[0]] = [n[1],n[2],n[3],v, mt]
 		else:
 			#caused errors without catch (because of playing too fast)
 			try:
@@ -102,8 +102,8 @@ while going:
 		print "Note: %s, Volume: %s, Time: %s" % (n, v, mt)
 		print "Playing: %s" % playing
 
-	setText(playing)
-	pygame.display.flip()
+		setText(playing)
+		pygame.display.flip()
 	
 #remove midi object			
 del i
