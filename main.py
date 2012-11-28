@@ -108,9 +108,6 @@ while going:
 				
 		print "Note: %s, Volume: %s, Time: %s" % (n, v, mt)
 		print "Playing: %s" % playing
-		
-		setText(playing)
-		pygame.display.flip()
 	else:
 		to_delete = []
 		if len(playing) > 0:
@@ -122,8 +119,8 @@ while going:
 			print "Deleting %s due to being stuck." % item
 			del playing[item]
 			
-		setText(playing)
-		pygame.display.flip()
+	setText(playing)
+	pygame.display.flip()
 	
 #remove midi object			
 del i
