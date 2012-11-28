@@ -17,12 +17,14 @@ pygame.midi.init()
 
 #size of pyano window
 WINDOW_SIZE = (800, 600)
+SCREEN_COLOR = (126,126,126)
 
 #piano input device
 i = pygame.midi.Input(yamaha)
 
 screen = pygame.display.set_mode((WINDOW_SIZE))
-screen.fill((126,126,126))
+
+screen.fill(SCREEN_COLOR)
 pygame.display.flip()
 
 #time
@@ -42,7 +44,7 @@ def get_text(text, color, bgcolor, cx, cy, size):
 
 #draw all the text to the screen
 def setText(t):
-	screen.fill((126,126,126))
+	screen.fill(SCREEN_COLOR)
 	#text y location
 	for text in t:
 		s = "%s" % text
@@ -50,7 +52,8 @@ def setText(t):
 		height_mod = t[text][1] * 25
 		size_mod = t[text][4] % 10
 		font_color = t[text][3]
-		data = get_text(s, font_color, (126,126,126), width_mod, height_mod, 20 + size_mod)
+		
+		data = get_text(s, font_color, SCREEN_COLOR, width_mod, height_mod, 20 + size_mod)
 		screen.blit(data[0], data[1])
 		
 # convert integer into note/octave
