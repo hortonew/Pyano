@@ -22,7 +22,7 @@ WINDOW_SIZE = (800, 600)
 i = pygame.midi.Input(yamaha)
 
 screen = pygame.display.set_mode((WINDOW_SIZE))
-screen.fill((255,255,255))
+screen.fill((126,126,126))
 pygame.display.flip()
 
 #time
@@ -42,20 +42,20 @@ def get_text(text, color, bgcolor, cx, cy, size):
 
 #draw all the text to the screen
 def setText(t):
-	screen.fill((255,255,255))
+	screen.fill((126,126,126))
 	#text y location
 	for text in t:
-		#text
 		s = "%s" % text
-		modifier = t[text][2]
-		ht = t[text][1] * 25
-		data = get_text(s, (255,0,0), (255,255,255), 50*modifier, ht, 20+modifier)
+		width_mod = t[text][2] * 50
+		height_mod = t[text][1] * 25
+		size_mod = t[text][4] % 10
+		font_color = t[text][3]
+		data = get_text(s, font_color, (126,126,126), width_mod, height_mod, 20 + size_mod)
 		screen.blit(data[0], data[1])
 		
 # convert integer into note/octave
 def getNote(i):
 	notes = ['A', 'A#/Bb', 'B', 'C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab']
-	
 	#Low A starts on 21
 	note = i-20
 	count = 1
@@ -65,8 +65,13 @@ def getNote(i):
 		note -= 12
 		count += 1
 	
+	#if note is a white key
+	if note in [1,3,4,6,8,9,11]:
+		color = (255,255,255)
+	else:
+		color = (0,0,0)
 	name = "%s%s" % (notes[note-1], count)
-	return [name, notes[note-1], note, count]
+	return [name, notes[note-1], note, count, color]
 
 #loop
 while going:
@@ -90,7 +95,7 @@ while going:
 		v = midi_events[0][0][2]
 		
 		if v != 0:
-			playing[n[0]] = [n[1],n[2],n[3],v, mt]
+			playing[n[0]] = [n[1],n[2],n[3],n[4],v, mt]
 		else:
 			#caused errors without catch (because of playing too fast)
 			try:
