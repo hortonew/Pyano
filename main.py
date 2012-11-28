@@ -106,10 +106,22 @@ while going:
 			except:
 				pass
 				
-		#print data
 		print "Note: %s, Volume: %s, Time: %s" % (n, v, mt)
 		print "Playing: %s" % playing
-
+		
+		setText(playing)
+		pygame.display.flip()
+	else:
+		to_delete = []
+		if len(playing) > 0:
+			for item in playing:
+				if (pygame.midi.time()-playing[item][5]) > 1000:
+					to_delete.append(item)
+					print "Gotta delete %s" % item
+		for item in to_delete:
+			print "Deleting %s due to being stuck." % item
+			del playing[item]
+			
 		setText(playing)
 		pygame.display.flip()
 	
