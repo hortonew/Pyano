@@ -105,7 +105,8 @@ while going:
 				del playing[n[0]]
 			except:
 				pass
-				
+
+		#Console output		
 		print "Note: %s, Volume: %s, Time: %s" % (n, v, mt)
 		print "Playing: %s" % playing
 	else:
@@ -114,7 +115,7 @@ while going:
 			for item in playing:
 				if (pygame.midi.time()-playing[item][5]) > 1000:
 					to_delete.append(item)
-					print "Gotta delete %s" % item
+					print "Stuck note: %s" % item
 		for item in to_delete:
 			print "Deleting %s due to being stuck." % item
 			del playing[item]
