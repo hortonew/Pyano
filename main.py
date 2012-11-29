@@ -82,7 +82,6 @@ def getNote(i):
 	name = "%s%s" % (notes[note-1], count)
 	return [name, notes[note-1], note, count, color]
 
-
 def loadFile(song):
 	import os
 	music_dir = 'music/'
