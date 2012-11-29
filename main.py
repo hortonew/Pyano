@@ -94,10 +94,9 @@ def playMidi():
 	global STARTED
 	song_notes = []
 	if STARTED:
-		print "Game Paused"
+		print "Game Stop"
 	else:
 		print "Game Started"
-		#f = loadFile('1.txt')
 		f = loadFile('1.txt')
 		for line in f:
 			song_notes.append(line.strip().split(','))
