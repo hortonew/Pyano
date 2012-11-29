@@ -18,6 +18,7 @@ pygame.midi.init()
 #size of pyano window
 WINDOW_SIZE = (800, 600)
 SCREEN_COLOR = (126,126,126)
+STARTED = False
 
 #piano input device
 i = pygame.midi.Input(yamaha)
@@ -55,7 +56,12 @@ def setText(t):
 		
 		data = get_text(s, font_color, SCREEN_COLOR, width_mod, height_mod, 20 + size_mod)
 		screen.blit(data[0], data[1])
-		
+
+def songText(t):
+	for line in t:
+		for note in line:
+			print note
+
 # convert integer into note/octave
 def getNote(i):
 	notes = ['A', 'A#/Bb', 'B', 'C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab']
@@ -76,6 +82,28 @@ def getNote(i):
 	name = "%s%s" % (notes[note-1], count)
 	return [name, notes[note-1], note, count, color]
 
+
+def loadFile(song):
+	import os
+	music_dir = 'music/'
+	mypath = os.path.dirname( os.path.realpath( __file__) )
+	f = open(os.path.join(mypath, music_dir + song))
+	return f
+
+def playMidi():
+	global STARTED
+	song_notes = []
+	if STARTED:
+		print "Game Paused"
+	else:
+		print "Game Started"
+		#f = loadFile('1.txt')
+		f = loadFile('1.txt')
+		for line in f:
+			song_notes.append(line.strip().split(','))
+		songText(song_notes)
+	STARTED = not STARTED
+	
 #loop
 while going:
 	events = event_get()
@@ -85,7 +113,10 @@ while going:
 			going = False
 		#exit
 		if e.type in [pgl.KEYDOWN]:
-			going = False
+			if e.unicode == 'p':
+				playMidi()
+			else:
+				going = False
 			
 	if i.poll():
 		midi_events = i.read(10)
