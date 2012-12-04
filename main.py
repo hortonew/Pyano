@@ -19,6 +19,7 @@ pygame.midi.init()
 WINDOW_SIZE = (800, 600)
 SCREEN_COLOR = (126,126,126)
 STARTED = False
+CHORDGAME = False
 
 #piano input device
 i = pygame.midi.Input(yamaha)
@@ -43,19 +44,21 @@ def get_text(text, color, bgcolor, cx, cy, size):
 
 		return t, t_rect
 
-#draw all the text to the screen
-def setText(t):
+#draw all the items to the screen
+def draw():
+	global playing
 	screen.fill(SCREEN_COLOR)
-	#text y location
-	for text in t:
+
+	for text in playing:
 		s = "%s" % text
-		width_mod = t[text][2] * 50
-		height_mod = t[text][1] * 25
-		size_mod = t[text][4] % 10
-		font_color = t[text][3]
-		
+		width_mod = playing[text][2] * 50
+		height_mod = playing[text][1] * 25
+		size_mod = playing[text][4] % 10
+		font_color = playing[text][3]
 		data = get_text(s, font_color, SCREEN_COLOR, width_mod, height_mod, 20 + size_mod)
 		screen.blit(data[0], data[1])
+		
+	pygame.display.flip()
 
 def songText(t):
 	for line in t:
@@ -102,6 +105,17 @@ def playMidi():
 		songText(song_notes)
 	STARTED = not STARTED
 	
+def playChordGame():
+	global CHORDGAME
+	global playing
+	if CHORDGAME:
+		print "Chord Game Stopped"
+		f = loadFile('chords.txt')
+		f.close()
+	else:
+		print "Time to play the Chord Learning Game"
+	CHORDGAME = not CHORDGAME
+
 #loop
 while going:
 	events = event_get()
@@ -113,6 +127,8 @@ while going:
 		if e.type in [pgl.KEYDOWN]:
 			if e.unicode == 'p':
 				playMidi()
+			elif e.unicode == 'g':
+				playChordGame()
 			else:
 				going = False
 			
@@ -148,9 +164,8 @@ while going:
 		for item in to_delete:
 			print "Deleting %s due to being stuck." % item
 			del playing[item]
-			
-	setText(playing)
-	pygame.display.flip()
+		
+	draw()
 	
 #remove midi object			
 del i
